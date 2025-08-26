@@ -33,7 +33,7 @@ export default function LandingPage() {
                 width="600"
                 height="600"
                 alt="Hero"
-                data-ai-hint="wellness meditation"
+                data-ai-hint="indian youth"
                 className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
               />
             </div>

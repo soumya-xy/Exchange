@@ -32,7 +32,7 @@ export default function DashboardPage() {
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-1 p-4 md:p-8 lg:p-12">
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-6xl">
           <div className="space-y-4 mb-8">
             <h1 className="text-3xl md:text-4xl font-bold font-headline">
               Welcome back, {user.name}!
@@ -42,12 +42,14 @@ export default function DashboardPage() {
             </p>
           </div>
           
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <JournalingSection />
             </div>
-            <AffirmationSection />
-            <ProgressChart />
+            <div className="lg:col-span-1 space-y-8">
+              <AffirmationSection />
+              <ProgressChart />
+            </div>
           </div>
         </div>
       </main>
