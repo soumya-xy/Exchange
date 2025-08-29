@@ -2,41 +2,59 @@
 
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Gamepad2, Wind } from "lucide-react";
+import { Music, Wind, Puzzle } from "lucide-react";
 import { Button } from "../ui/button";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+
+function BreathingCircle() {
+    return (
+        <div className="relative w-64 h-64 flex items-center justify-center">
+            <div className="absolute w-full h-full bg-primary/20 rounded-full animate-pulse-slow"></div>
+            <div className="absolute w-2/3 h-2/3 bg-primary/30 rounded-full animate-pulse-slower"></div>
+            <div className="absolute w-1/3 h-1/3 bg-primary/40 rounded-full"></div>
+            <div className="absolute text-foreground font-semibold text-lg animate-breathing-text">
+                Breathe
+            </div>
+        </div>
+    )
+}
 
 export function GamesSection() {
   return (
-    <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-       <CardHeader className="flex flex-row items-center justify-between">
-        <div className="space-y-1">
-            <CardTitle className="text-lg">
-                Interactive Games
-            </CardTitle>
-            <CardDescription>Engage in activities to calm your mind.</CardDescription>
-        </div>
-        <div className="p-3 bg-primary/10 rounded-lg">
-            <Gamepad2 className="w-6 h-6 text-primary"/>
-        </div>
-      </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col items-center p-4 rounded-lg bg-secondary/30 text-center hover:bg-secondary/50 transition-colors">
-            <div className="p-3 bg-background rounded-full mb-3">
-                <Wind className="w-6 h-6 text-accent"/>
+    <Card className="shadow-none border-none bg-transparent">
+        <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+                <CardTitle className="text-2xl font-bold">The Calm Zone</CardTitle>
+                <CardDescription>Engage in activities to calm your mind and find focus.</CardDescription>
             </div>
-            <h3 className="font-semibold text-sm mb-1">Breathing</h3>
-            <p className="text-xs text-muted-foreground mb-3">Find calm and regulate your breathing.</p>
-            <Button variant="outline" size="sm">Start</Button>
-        </div>
-         <div className="flex flex-col items-center p-4 rounded-lg bg-secondary/30 text-center">
-            <div className="p-3 bg-background rounded-full mb-3">
-                 <Image src="https://picsum.photos/24/24" alt="p" width={24} height={24} className="rounded-full" data-ai-hint="puzzle piece"/>
+            <div className="flex items-center space-x-2">
+                <Music className="text-muted-foreground"/>
+                <Label htmlFor="music-toggle">Background Music</Label>
+                <Switch id="music-toggle" />
             </div>
-            <h3 className="font-semibold text-sm mb-1">Puzzle</h3>
-            <p className="text-xs text-muted-foreground mb-3">A simple puzzle to help you focus.</p>
-            <Button variant="outline" size="sm" disabled>Coming Soon</Button>
-        </div>
-      </CardContent>
+        </CardHeader>
+        <CardContent className="grid md:grid-cols-2 gap-6 items-start">
+            <Card className="shadow-xl">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Wind className="text-primary"/>Breathing Exercise</CardTitle>
+                    <CardDescription>Follow the circle to guide your breath. Inhale as it expands, exhale as it contracts.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center p-8 min-h-[300px]">
+                    <BreathingCircle/>
+                </CardContent>
+            </Card>
+             <Card className="shadow-xl">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Puzzle className="text-primary"/>Mind Puzzles</CardTitle>
+                    <CardDescription>Simple, relaxing puzzles to help you focus your mind.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center justify-center p-8 min-h-[300px] bg-muted/50 rounded-b-lg">
+                    <Image src="https://picsum.photos/300/200" alt="Puzzle" width={300} height={200} className="rounded-lg shadow-lg mb-6" data-ai-hint="calm landscape"/>
+                    <Button variant="outline" size="lg" disabled>Coming Soon</Button>
+                </CardContent>
+            </Card>
+        </CardContent>
     </Card>
   );
 }

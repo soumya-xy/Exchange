@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Header } from "@/components/header";
-import { Loader2 } from "lucide-react";
+import { Loader2, MessageCircle, BookHeart, Gamepad2, Users } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChatbotSection } from "@/components/dashboard/chatbot-section";
 import { DailyDiarySection } from "@/components/dashboard/daily-diary-section";
 import { GamesSection } from "@/components/dashboard/games-section";
@@ -29,32 +30,52 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50/50">
+    <div className="flex flex-col min-h-screen bg-muted/30">
       <Header />
-      <main className="flex-1 p-4 md:p-6 lg:p-8">
-        <div className="container mx-auto max-w-7xl">
-          <div className="space-y-4 mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
-              Welcome back, {user.name}!
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              This is your space to reflect, grow, and find support.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
-            {/* Main Content: Chatbot */}
-            <div className="xl:col-span-2">
-              <ChatbotSection />
+      <main className="flex-1">
+        <div className="container mx-auto max-w-7xl py-6 md:py-8">
+            <div className="space-y-2 mb-8">
+                <h1 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
+                    Welcome back, {user.name}!
+                </h1>
+                <p className="text-muted-foreground text-lg">
+                    This is your space to reflect, grow, and find support.
+                </p>
             </div>
 
-            {/* Sidebar: Other features */}
-            <div className="space-y-6 lg:space-y-8">
-              <DailyDiarySection />
-              <GamesSection />
-              <CommunityStoriesSection />
-            </div>
-          </div>
+            <Tabs defaultValue="chatbot" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto mb-6">
+                    <TabsTrigger value="chatbot" className="py-3 gap-2">
+                        <MessageCircle className="h-5 w-5" />
+                        AI Companion
+                    </TabsTrigger>
+                    <TabsTrigger value="diary" className="py-3 gap-2">
+                        <BookHeart className="h-5 w-5" />
+                        Daily Diary
+                    </TabsTrigger>
+                    <TabsTrigger value="games" className="py-3 gap-2">
+                        <Gamepad2 className="h-5 w-5" />
+                        Calm Zone
+                    </TabsTrigger>
+                    <TabsTrigger value="stories" className="py-3 gap-2">
+                        <Users className="h-5 w-5" />
+                        Community Stories
+                    </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="chatbot">
+                    <ChatbotSection />
+                </TabsContent>
+                <TabsContent value="diary">
+                    <DailyDiarySection />
+                </TabsContent>
+                <TabsContent value="games">
+                    <GamesSection />
+                </TabsContent>
+                <TabsContent value="stories">
+                    <CommunityStoriesSection />
+                </TabsContent>
+            </Tabs>
         </div>
       </main>
     </div>
