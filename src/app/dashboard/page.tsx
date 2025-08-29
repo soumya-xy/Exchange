@@ -29,28 +29,28 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-gray-50/50">
       <Header />
-      <main className="flex-1 p-4 md:p-8 lg:p-12">
+      <main className="flex-1 p-4 md:p-6 lg:p-8">
         <div className="container mx-auto max-w-7xl">
           <div className="space-y-4 mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold font-headline">
+            <h1 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
               Welcome back, {user.name}!
             </h1>
             <p className="text-muted-foreground text-lg">
-              Your safe space for mental wellness.
+              This is your space to reflect, grow, and find support.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content: Chatbot and Daily Diary */}
-            <div className="lg:col-span-2 space-y-8">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+            {/* Main Content: Chatbot */}
+            <div className="xl:col-span-2">
               <ChatbotSection />
-              <DailyDiarySection />
             </div>
 
-            {/* Sidebar: Games and Community Stories */}
-            <div className="lg:col-span-1 space-y-8">
+            {/* Sidebar: Other features */}
+            <div className="space-y-6 lg:space-y-8">
+              <DailyDiarySection />
               <GamesSection />
               <CommunityStoriesSection />
             </div>

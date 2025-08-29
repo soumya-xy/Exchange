@@ -12,7 +12,6 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart"
 import { BookMarked, PenSquare } from "lucide-react"
 import { Button } from "../ui/button";
@@ -32,24 +31,26 @@ const chartConfig = {
     label: "Mood",
     color: "hsl(var(--primary))",
   },
-} satisfies ChartConfig
+}
 
 export function DailyDiarySection() {
   return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-            <BookMarked className="text-primary"/>
-            Daily Diary & Progress
-        </CardTitle>
-        <CardDescription>Reflect on your day and track your mood over time.</CardDescription>
+    <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div className="space-y-1">
+            <CardTitle className="text-lg">
+                Daily Diary & Progress
+            </CardTitle>
+            <CardDescription>Track your mood over time.</CardDescription>
+        </div>
+        <div className="p-3 bg-primary/10 rounded-lg">
+            <BookMarked className="w-6 h-6 text-primary"/>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <h3 className="text-sm font-medium text-muted-foreground mb-2">Mood Tracker</h3>
-          <ChartContainer config={chartConfig} className="h-[150px] w-full">
-            <BarChart accessibilityLayer data={chartData} margin={{ top: 20, right: 20, bottom: 0, left: -20}}>
-              <CartesianGrid vertical={false} />
+      <CardContent className="space-y-4">
+        <ChartContainer config={chartConfig} className="h-[120px] w-full">
+            <BarChart accessibilityLayer data={chartData} margin={{ top: 20, right: 0, bottom: 0, left: -20}}>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
                 dataKey="day"
                 tickLine={false}
@@ -60,18 +61,15 @@ export function DailyDiarySection() {
               />
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent indicator="dot" />}
+                content={<ChartTooltipContent indicator="dot" hideLabel />}
               />
-              <Bar dataKey="mood" fill="var(--color-mood)" radius={8} />
+              <Bar dataKey="mood" fill="var(--color-mood)" radius={5} />
             </BarChart>
           </ChartContainer>
-        </div>
-        <div className="flex justify-end">
-            <Button>
-                <PenSquare className="mr-2"/>
-                Write in Diary
-            </Button>
-        </div>
+        <Button className="w-full">
+            <PenSquare className="mr-2 h-4 w-4"/>
+            Write in Diary
+        </Button>
       </CardContent>
     </Card>
   )
