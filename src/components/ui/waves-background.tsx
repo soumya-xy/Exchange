@@ -1,3 +1,4 @@
+
 "use client";
 import { useRef, useEffect } from "react";
 import { cn } from "../../lib/utils";
@@ -57,7 +58,7 @@ export function Waves({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const boundingRef = useRef<DOMRect>(new DOMRect());
+  const boundingRef = useRef<DOMRect | null>(null);
   const noiseRef = useRef<Noise>(new Noise(Math.random()));
   const linesRef = useRef<Point[][]>([]);
   const mouseRef = useRef<MouseState>({
@@ -78,6 +79,10 @@ export function Waves({
     const container = containerRef.current;
     if (!canvas || !container) return;
 
+    if (!boundingRef.current) {
+      boundingRef.current = new DOMRect();
+    }
+
     ctxRef.current = canvas.getContext("2d");
 
     function setSize() {
@@ -88,6 +93,7 @@ export function Waves({
     }
 
     function setLines() {
+        if (!boundingRef.current) return;
       const { width, height } = boundingRef.current;
       linesRef.current = [];
       const oWidth = width + 200;
@@ -161,6 +167,7 @@ export function Waves({
     }
 
     function drawLines() {
+      if (!boundingRef.current) return;
       const { width, height } = boundingRef.current;
       const ctx = ctxRef.current;
       if (!ctx) return;
@@ -224,6 +231,7 @@ export function Waves({
       updateMouse(touch.clientX, touch.clientY);
     }
     function updateMouse(x: number, y: number) {
+      if (!boundingRef.current) return;
       const mouse = mouseRef.current;
       const b = boundingRef.current;
       mouse.x = x - b.left;
