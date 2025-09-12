@@ -14,7 +14,8 @@ export default function LandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         
-        <section className="relative w-full pt-32 pb-50 md:pt-48 md:pb-60 text-center overflow-hidden">        <div className="absolute inset-0 pointer-events-none z-0">
+        <section className="relative w-full pt-32 pb-50 md:pt-48 md:pb-60 text-center overflow-hidden">        
+        <div className="absolute inset-0 pointer-events-none z-0">
         <WavesDemo />
         </div>
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-background to-accent/10 -z-10"></div>

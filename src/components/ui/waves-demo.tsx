@@ -5,7 +5,7 @@ export function WavesDemo(): JSX.Element {
     <div className="relative w-full h-[800px] bg-background/80 rounded-lg overflow-hidden">
       <div className="absolute inset-0">
         <Waves
-          lineColor="rgb(188, 128, 59)"
+          lineColor="rgba(10, 108, 108, 0.2)"
           backgroundColor="transparent"
           waveSpeedX={0.02}
           waveSpeedY={0.01}
