@@ -37,9 +37,9 @@ export function Header() {
         <Logo />
         <div className="flex flex-1 items-center justify-end space-x-6">
           {!isDashboard && (
-             <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <Link href="/#features" className="text-muted-foreground transition-colors hover:text-foreground">Features</Link>
-                <Link href="/#how-it-works" className="text-muted-foreground transition-colors hover:text-foreground">How It Works</Link>
+             <nav className="hidden md:flex items-center space-x-8 text-base font-medium">
+                <Link href="/#features" className="text-muted-foreground transition-colors hover:text-foreground font-semibold">Features</Link>
+                <Link href="/#how-it-works" className="text-muted-foreground transition-colors hover:text-foreground font-semibold">How It Works</Link>
              </nav>
           )}
           <div className="flex items-center space-x-2">
@@ -66,7 +66,7 @@ export function Header() {
               </DropdownMenu>
             ) : (
               !isAuthPage && (
-                <Button asChild size="sm" variant="outline">
+                <Button asChild size="lg" className="shadow-lg mx-4" >
                   <Link href="/auth">Sign In</Link>
                 </Button>
               )
