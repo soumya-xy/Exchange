@@ -154,6 +154,8 @@ export function AuthForm() {
     );
   }
 
+  console.log("Is the form in Sign Up mode?", isSignUp);
+  
   return (
     <Card className="w-full max-w-md shadow-xl">
       <CardHeader className="text-center">
