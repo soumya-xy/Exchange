@@ -21,6 +21,7 @@ export function Header() {
   const pathname = usePathname();
 
   const isAuthPage = pathname === "/auth";
+  const isDashboard = pathname.startsWith("/dashboard");
 
   const handleSignOut = async () => {
     try {
@@ -34,8 +35,14 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <Logo />
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
+        <div className="flex flex-1 items-center justify-end space-x-6">
+          {!isDashboard && (
+             <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <Link href="/#features" className="text-muted-foreground transition-colors hover:text-foreground">Features</Link>
+                <Link href="/#how-it-works" className="text-muted-foreground transition-colors hover:text-foreground">How It Works</Link>
+             </nav>
+          )}
+          <div className="flex items-center space-x-2">
             {loading ? (
               <Skeleton className="h-8 w-20" />
             ) : user ? (
@@ -59,12 +66,12 @@ export function Header() {
               </DropdownMenu>
             ) : (
               !isAuthPage && (
-                <Button asChild size="sm">
+                <Button asChild size="sm" variant="outline">
                   <Link href="/auth">Sign In</Link>
                 </Button>
               )
             )}
-          </nav>
+          </div>
         </div>
       </div>
     </header>
