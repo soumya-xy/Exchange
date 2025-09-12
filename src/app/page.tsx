@@ -4,14 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Header } from "@/components/header";
 import { User, Map, BarChart, BookOpen, Heart, BrainCircuit, Bot, Activity } from "lucide-react";
+import { WavesDemo } from "@/components/ui/waves-demo";
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
+      
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative w-full pt-20 pb-24 md:pt-32 md:pb-40 text-center overflow-hidden">
+        
+        <section className="relative w-full pt-32 pb-50 md:pt-48 md:pb-60 text-center overflow-hidden">        <div className="absolute inset-0 pointer-events-none z-0">
+        <WavesDemo />
+        </div>
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-background to-accent/10 -z-10"></div>
           <div className="container px-4 md:px-6 relative">
             <div className="flex flex-col items-center space-y-4">
