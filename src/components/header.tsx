@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, UserCircle } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import {
@@ -17,10 +17,18 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function Header() {
-  const { user, logout, loading } = useAuth();
+  const { user, signOutUser, loading } = useAuth();
   const pathname = usePathname();
 
   const isAuthPage = pathname === "/auth";
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error("Failed to sign out:", error);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -35,13 +43,15 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="secondary" size="sm" className="gap-2">
                     <UserCircle className="h-5 w-5" />
-                    <span className="hidden sm:inline">{user.name}</span>
+                    <span className="hidden sm:inline">
+                      {user.displayName || user.email?.split('@')[0] || 'User'}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout} className="text-red-500 focus:text-red-500 focus:bg-red-50">
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-500 focus:text-red-500 focus:bg-red-50">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>
