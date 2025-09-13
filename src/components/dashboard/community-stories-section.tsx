@@ -47,19 +47,19 @@ export function CommunityStoriesSection() {
   return (
     <Card className="shadow-none border-none bg-transparent">
         <CardHeader>
-            <CardTitle className="text-2xl font-bold">Community Stories</CardTitle>
+            <CardTitle className="text-xl md:text-2xl font-bold">Community Stories</CardTitle>
             <CardDescription>Read anonymous, real experiences from your peers. You are not alone.</CardDescription>
         </CardHeader>
         <CardContent>
             <div className="flex flex-wrap gap-2 mb-6">
                 {filters.map(filter => (
-                    <Button key={filter} variant={filter === 'All' ? 'default' : 'outline'}>
+                    <Button key={filter} variant={filter === 'All' ? 'default' : 'outline'} size="sm">
                         {filter}
                     </Button>
                 ))}
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {stories.map((item, index) => (
                     <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
                         <CardHeader>

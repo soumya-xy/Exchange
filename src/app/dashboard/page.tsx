@@ -18,32 +18,32 @@ export default function DashboardPage() {
       <div className="flex flex-col min-h-screen bg-muted/30">
         <Header />
         <main className="flex-1">
-          <div className="container mx-auto max-w-7xl py-6 md:py-8">
+          <div className="container mx-auto max-w-7xl py-6 md:py-8 px-4">
               <div className="space-y-2 mb-8">
-                  <h1 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
-                      Welcome back, {user?.displayName || user?.email || 'User'}!
+                  <h1 className="text-2xl md:text-4xl font-bold font-headline text-foreground">
+                      Welcome back, {user?.displayName || user?.email?.split('@')[0] || 'User'}!
                   </h1>
-                  <p className="text-muted-foreground text-lg">
+                  <p className="text-muted-foreground text-base md:text-lg">
                       This is your space to reflect, grow, and find support.
                   </p>
               </div>
 
               <Tabs defaultValue="chatbot" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto mb-6">
-                      <TabsTrigger value="chatbot" className="py-3 gap-2">
-                          <MessageCircle className="h-5 w-5" />
+                      <TabsTrigger value="chatbot" className="py-2 md:py-3 gap-2 text-xs md:text-sm">
+                          <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
                           AI Companion
                       </TabsTrigger>
-                      <TabsTrigger value="diary" className="py-3 gap-2">
-                          <BookHeart className="h-5 w-5" />
+                      <TabsTrigger value="diary" className="py-2 md:py-3 gap-2 text-xs md:text-sm">
+                          <BookHeart className="h-4 w-4 md:h-5 md:w-5" />
                           Daily Diary
                       </TabsTrigger>
-                      <TabsTrigger value="games" className="py-3 gap-2">
-                          <Gamepad2 className="h-5 w-5" />
+                      <TabsTrigger value="games" className="py-2 md:py-3 gap-2 text-xs md:text-sm">
+                          <Gamepad2 className="h-4 w-4 md:h-5 md:w-5" />
                           Calm Zone
                       </TabsTrigger>
-                      <TabsTrigger value="stories" className="py-3 gap-2">
-                          <Users className="h-5 w-5" />
+                      <TabsTrigger value="stories" className="py-2 md:py-3 gap-2 text-xs md:text-sm">
+                          <Users className="h-4 w-4 md:h-5 md:w-5" />
                           Community Stories
                       </TabsTrigger>
                   </TabsList>

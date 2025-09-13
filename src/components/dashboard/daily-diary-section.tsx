@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import {
   Card,
   CardContent,
@@ -60,7 +60,7 @@ export function DailyDiarySection() {
   return (
     <Card className="shadow-none border-none bg-transparent">
         <CardHeader>
-            <CardTitle className="text-2xl font-bold">Daily Diary & Progress</CardTitle>
+            <CardTitle className="text-xl md:text-2xl font-bold">Daily Diary & Progress</CardTitle>
             <CardDescription>Reflect on your day, track your mood, and see your journey.</CardDescription>
         </CardHeader>
         <CardContent className="grid md:grid-cols-3 gap-6">
@@ -71,7 +71,7 @@ export function DailyDiarySection() {
                         <CardDescription>Visualize your emotional trends over the last 7 days.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                        <ChartContainer config={chartConfig} className="h-[200px] sm:h-[250px] w-full">
                             <BarChart accessibilityLayer data={chartData} margin={{ top: 20, right: 10, left: -20, bottom: 0}}>
                             <CartesianGrid vertical={false} strokeDasharray="3 3" />
                             <XAxis
@@ -94,14 +94,14 @@ export function DailyDiarySection() {
                                 cursor={false}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Bar dataKey="mood" fill="var(--color-mood)" radius={8} />
+                            <Bar dataKey="mood" fill="var(--color-mood)" radius={window.innerWidth < 640 ? 4 : 8} />
                             </BarChart>
                         </ChartContainer>
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
+                        <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
                            <BookCheck className="text-primary"/> Daily Reflection
                         </CardTitle>
                         <CardDescription>
@@ -129,7 +129,7 @@ export function DailyDiarySection() {
             </div>
             <div className="space-y-6">
                  <Card className="shadow-lg">
-                    <CardContent className="p-4">
+                    <CardContent className="p-2 sm:p-4 flex justify-center">
                         <Calendar
                             mode="single"
                             selected={date}
@@ -149,7 +149,7 @@ export function DailyDiarySection() {
                 </Card>
                 <Card className="shadow-lg bg-gradient-to-br from-primary/80 to-accent/80 text-primary-foreground">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
+                        <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
                             <Star />
                             Motivational Streak
                         </CardTitle>

@@ -9,7 +9,7 @@ import { Label } from "../ui/label";
 
 function BreathingCircle() {
     return (
-        <div className="relative w-64 h-64 flex items-center justify-center">
+        <div className="relative w-48 h-48 sm:w-64 sm:h-64 flex items-center justify-center">
             <div className="absolute w-full h-full bg-primary/20 rounded-full animate-pulse-slow"></div>
             <div className="absolute w-2/3 h-2/3 bg-primary/30 rounded-full animate-pulse-slower"></div>
             <div className="absolute w-1/3 h-1/3 bg-primary/40 rounded-full"></div>
@@ -23,9 +23,9 @@ function BreathingCircle() {
 export function GamesSection() {
   return (
     <Card className="shadow-none border-none bg-transparent">
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-                <CardTitle className="text-2xl font-bold">The Calm Zone</CardTitle>
+                <CardTitle className="text-xl md:text-2xl font-bold">The Calm Zone</CardTitle>
                 <CardDescription>Engage in activities to calm your mind and find focus.</CardDescription>
             </div>
             <div className="flex items-center space-x-2">
@@ -50,7 +50,7 @@ export function GamesSection() {
                     <CardDescription>Simple, relaxing puzzles to help you focus your mind.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center p-8 min-h-[300px] bg-muted/50 rounded-b-lg">
-                    <Image src="https://picsum.photos/300/200" alt="Puzzle" width={300} height={200} className="rounded-lg shadow-lg mb-6" data-ai-hint="calm landscape"/>
+                    <Image src="https://picsum.photos/300/200" alt="Puzzle" width={300} height={200} className="rounded-lg shadow-lg mb-6 w-full max-w-[300px]" data-ai-hint="calm landscape"/>
                     <Button variant="outline" size="lg" disabled>Coming Soon</Button>
                 </CardContent>
             </Card>

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { User, Map, BarChart } from "lucide-react";
-import { AnimatedHowItWorksCard } from "../ui/animatedCard"; // We will create this next
+import { AnimatedHowItWorksCard } from "../ui/animatedCard"; 
 
 const steps = [
   {
@@ -27,7 +27,7 @@ export function HowItWorksSection() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.3, // Each card will animate 0.3s after the previous one
+        staggerChildren: 0.3,
       },
     },
   };
@@ -46,7 +46,6 @@ export function HowItWorksSection() {
   return (
     <section id="how-it-works" className="w-full py-16 md:py-24 bg-muted/30 overflow-hidden">
       <div className="container px-4 md:px-6">
-        {/* Section Header */}
         <div className="text-center space-y-3 mb-16 md:mb-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline">
             A Simple, Guided Path
@@ -56,15 +55,13 @@ export function HowItWorksSection() {
           </p>
         </div>
 
-        {/* Animated Grid */}
         <motion.div
           className="relative grid md:grid-cols-3 gap-x-12 gap-y-16"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }} // Animation triggers when 40% of the element is in view
+          viewport={{ once: true, amount: 0.2 }}
           variants={containerVariants}
         >
-          {/* SVG Connector Line for a smooth drawing animation */}
           <motion.svg
             className="absolute top-12 left-0 w-full h-px hidden md:block"
             aria-hidden="true"
@@ -75,7 +72,7 @@ export function HowItWorksSection() {
               y1="0" 
               x2="100%" 
               y2="0" 
-              strokeDasharray="4 4" // Creates a dashed line
+              strokeDasharray="4 4" 
               className="stroke-border" 
               strokeWidth="2"
               variants={lineVariants}

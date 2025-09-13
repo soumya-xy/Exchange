@@ -84,13 +84,13 @@ export function FeaturesSection() {
           {features.map((feature, index) => (
             <motion.div key={index} variants={itemVariants}>
               <Card className="shadow-md hover:shadow-xl transition-shadow duration-300 h-full">
-                <CardHeader className="flex flex-row items-center gap-4">
+                <CardHeader className="flex flex-row items-center gap-4 p-4 md:p-6">
                   <div className="rounded-full bg-primary/10 p-3">
                     {feature.icon}
                   </div>
-                  <CardTitle>{feature.title}</CardTitle>
+                  <CardTitle className="text-lg md:text-xl">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 md:p-6 pt-0">
                   <p className="text-muted-foreground">
                     {feature.description}
                   </p>
