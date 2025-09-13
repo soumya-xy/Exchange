@@ -36,7 +36,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <Logo />
         <div className="flex flex-1 items-center justify-end space-x-6">
-          {!isDashboard && (
+          {!isDashboard && !isAuthPage && (
              <nav className="hidden md:flex items-center space-x-8 text-base font-medium">
                 <Link href="/#features" className="text-muted-foreground transition-colors hover:text-foreground font-semibold">Features</Link>
                 <Link href="/#how-it-works" className="text-muted-foreground transition-colors hover:text-foreground font-semibold">How It Works</Link>
@@ -48,7 +48,7 @@ export function Header() {
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="secondary" size="sm" className="gap-2">
+                  <Button variant="secondary" size="sm" className="gap-2 mx-4">
                     <UserCircle className="h-5 w-5" />
                     <span className="hidden sm:inline">
                       {user.displayName || user.email?.split('@')[0] || 'User'}
