@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { aiJournaling } from "@/ai/flows/ai-journaling";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -73,7 +72,19 @@ export function ChatbotSection() {
     form.reset();
 
     try {
-      const result = await aiJournaling({ journalEntry: messageText });
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ journalEntry: messageText }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
       const aiMessage: Message = { text: result.aiResponse, sender: "ai" };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (e) {
