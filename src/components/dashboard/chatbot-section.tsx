@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/contexts/auth-context"; 
 
 
 const chatSchema = z.object({
@@ -41,6 +42,7 @@ const moodPrompts = [
 ]
 
 export function ChatbotSection() {
+  const { user } = useAuth(); // 2. GET the current user from your auth context
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -49,7 +51,6 @@ export function ChatbotSection() {
     resolver: zodResolver(chatSchema),
     defaultValues: { message: "" },
   });
-
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
         const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
@@ -66,18 +67,39 @@ export function ChatbotSection() {
   const handleSendMessage = async (messageText: string) => {
     if (!messageText.trim()) return;
 
+    // First, check if the user is logged in.
+    if (!user) {
+      const errorMessage: Message = {
+        text: "You must be logged in to chat. Please refresh the page.",
+        sender: "ai",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      return;
+    }
+
     setIsLoading(true);
     const userMessage: Message = { text: messageText, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     form.reset();
 
     try {
-      const response = await fetch('/api/chat', {
+      // Get the Firebase ID token (JWT) for the current user.
+      const token = await user.getIdToken();
+
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      
+      const response = await fetch(`${backendUrl}/api/chat/message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Add the Authorization header with the Bearer token.
+          // Your Python backend will verify this token.
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ journalEntry: messageText }),
+        body: JSON.stringify({ 
+          message: messageText,
+          userId: user.uid // ✅ Add the user's unique ID here
+        }), // Changed body key to 'message'
       });
 
       if (!response.ok) {
