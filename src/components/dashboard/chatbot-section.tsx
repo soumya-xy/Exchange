@@ -99,6 +99,7 @@ export function ChatbotSection() {
         body: JSON.stringify({ 
           message: messageText,
           userId: user.uid // ✅ Add the user's unique ID here
+ 
         }), // Changed body key to 'message'
       });
 
