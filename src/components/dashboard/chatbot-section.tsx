@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Loader2, Send, Sparkles, AlertTriangle } from "lucide-react";
+import { Loader2, Send, Sparkles, AlertTriangle, Mic, Phone, UserCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/auth-context"; 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 
 const chatSchema = z.object({
@@ -83,25 +84,14 @@ export function ChatbotSection() {
     form.reset();
 
     try {
-      // Get the Firebase ID token (JWT) for the current user.
-      const token = await user.getIdToken();
-
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-      
-      const response = await fetch(`${backendUrl}/api/chat/message`, {
+      const response = await fetch(`/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add the Authorization header with the Bearer token.
-          // Your Python backend will verify this token.
-          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ 
-          message: messageText,
-          userId: user.uid // ✅ Add the user's unique ID here
- 
-        }), // Changed body key to 'message'
+        body: JSON.stringify({ journalEntry: messageText }),
       });
+
 
       if (!response.ok) {
         throw new Error(`API error: ${response.statusText}`);
@@ -130,6 +120,8 @@ export function ChatbotSection() {
     handleSendMessage(`I'm feeling ${mood.toLowerCase()} today.`);
   }
 
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'U';
+
   return (
     <Card className="shadow-xl flex flex-col h-[75vh] max-h-[800px] border-primary/20 bg-background">
       <CardHeader className="flex-row items-center justify-between">
@@ -140,31 +132,45 @@ export function ChatbotSection() {
                 <p className="text-sm text-muted-foreground">A safe and private space to share your thoughts.</p>
             </div>
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive" size="sm">
-                <AlertTriangle className="mr-2 h-4 w-4" />
-                Panic Button
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Need Immediate Help?</AlertDialogTitle>
-              <AlertDialogDescription>
-                If you are in a crisis or any other person may be in danger, please don't use this app. These resources can provide you with immediate help.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <div className="space-y-2 text-sm">
-                <p><strong>AASRA:</strong> <a href="tel:91-9820466726" className="text-primary hover:underline">91-9820466726</a> (24x7 Helpline)</p>
-                <p><strong>Vandrevala Foundation:</strong> <a href="tel:91-9999666555" className="text-primary hover:underline">91-9999666555</a> (24x7 Helpline)</p>
-                <p><strong>iCALL:</strong> <a href="tel:91-9152987821" className="text-primary hover:underline">91-9152987821</a> (Mon-Sat, 10 AM - 8 PM)</p>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Close</AlertDialogCancel>
-              <AlertDialogAction asChild><a href="tel:91-9820466726">Call Now</a></AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <div className="flex items-center gap-2">
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button variant="ghost" size="icon" disabled>
+                            <Phone className="h-5 w-5 text-muted-foreground" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Voice Conversation (Coming Soon)</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                    <AlertTriangle className="mr-2 h-4 w-4" />
+                    Panic Button
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Need Immediate Help?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    If you are in a crisis or any other person may be in danger, please don't use this app. These resources can provide you with immediate help.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="space-y-2 text-sm">
+                    <p><strong>AASRA:</strong> <a href="tel:91-9820466726" className="text-primary hover:underline">91-9820466726</a> (24x7 Helpline)</p>
+                    <p><strong>Vandrevala Foundation:</strong> <a href="tel:91-9999666555" className="text-primary hover:underline">91-9999666555</a> (24x7 Helpline)</p>
+                    <p><strong>iCALL:</strong> <a href="tel:91-9152987821" className="text-primary hover:underline">91-9152987821</a> (Mon-Sat, 10 AM - 8 PM)</p>
+                </div>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Close</AlertDialogCancel>
+                  <AlertDialogAction asChild><a href="tel:91-9820466726">Call Now</a></AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+        </div>
       </CardHeader>
       
       <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden p-4 md:p-6">
@@ -206,6 +212,17 @@ export function ChatbotSection() {
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                 </div>
+                 {message.sender === "user" && (
+                    <Avatar className="h-9 w-9 border-2 border-muted shadow-inner">
+                      <AvatarFallback className="bg-muted text-muted-foreground">
+                          {user?.photoURL ? (
+                              <img src={user.photoURL} alt={userName} className="w-full h-full object-cover" />
+                          ) : (
+                            <UserCircle className="w-6 h-6"/>
+                          )}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
               </div>
             ))}
             {isLoading && (
@@ -231,14 +248,28 @@ export function ChatbotSection() {
               control={form.control}
               name="message"
               render={({ field }) => (
-                <FormItem className="flex-1">
+                <FormItem className="flex-1 relative">
                   <FormControl>
-                    <Input placeholder="Share what's on your mind..." {...field} autoComplete="off" className="text-base h-11 rounded-full px-5" />
+                    <Input placeholder="Share what's on your mind..." {...field} autoComplete="off" className="text-base h-11 rounded-full px-5 pr-12" />
                   </FormControl>
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-full" disabled>
+                            <Mic className="h-5 w-5 text-muted-foreground" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Voice to Text (Coming Soon)</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                 </FormItem>
               )}
             />
-            <Button type="submit" size="icon" disabled={isLoading} className="w-11 h-11 rounded-full">
+            <Button type="submit" size="icon" disabled={isLoading} className="w-11 h-11 rounded-full shrink-0">
               <Send className="h-5 w-5" />
             </Button>
           </form>
