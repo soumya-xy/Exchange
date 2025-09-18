@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Loader2, Send, Sparkles, AlertTriangle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Mic } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/auth-context"; 
+
 
 const chatSchema = z.object({
   message: z.string().min(1, { message: "Message cannot be empty." }),
@@ -39,6 +41,8 @@ const moodPrompts = [
     { mood: "😡", label: "Angry" },
     { mood: "😨", label: "Anxious" }
 ]
+
+
 
 export function ChatbotSection() {
   const { user } = useAuth(); // 2. GET the current user from your auth context
@@ -65,8 +69,7 @@ export function ChatbotSection() {
 
   const handleSendMessage = async (messageText: string) => {
     if (!messageText.trim()) return;
-
-    // First, check if the user is logged in.
+  
     if (!user) {
       const errorMessage: Message = {
         text: "You must be logged in to chat. Please refresh the page.",
@@ -75,29 +78,40 @@ export function ChatbotSection() {
       setMessages((prev) => [...prev, errorMessage]);
       return;
     }
-
+  
     setIsLoading(true);
     const userMessage: Message = { text: messageText, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     form.reset();
-
+  
     try {
-      const response = await fetch(`/api/chat`, {
+      const token = await user.getIdToken();
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      
+      const response = await fetch(`${backendUrl}/api/chat/message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ journalEntry: messageText }),
+        // Body updated to only send the message, as userId comes from the token
+        body: JSON.stringify({ 
+          message: messageText,
+        }),
       });
-
-
+  
       if (!response.ok) {
         throw new Error(`API error: ${response.statusText}`);
       }
-
+  
       const result = await response.json();
-      const aiMessage: Message = { text: result.aiResponse, sender: "ai" };
+      console.log("Backend response received:", result); // Good for debugging
+      
+      // ✅ THE FIX: Access the nested response text correctly
+      const aiMessage: Message = { text: result.response, sender: "ai" };
+  
       setMessages((prev) => [...prev, aiMessage]);
+  
     } catch (e) {
       const errorMessage: Message = {
         text: "Sorry, I'm having trouble connecting. Please try again later.",
@@ -118,8 +132,6 @@ export function ChatbotSection() {
     handleSendMessage(`I'm feeling ${mood.toLowerCase()} today.`);
   }
 
-  const userName = user?.displayName || user?.email?.split('@')[0] || 'U';
-
   return (
     <Card className="shadow-xl flex flex-col h-[75vh] max-h-[800px] border-primary/20 bg-background">
       <CardHeader className="flex-row items-center justify-between">
@@ -130,33 +142,31 @@ export function ChatbotSection() {
                 <p className="text-sm text-muted-foreground">A safe and private space to share your thoughts.</p>
             </div>
         </div>
-        <div>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">
-                    <AlertTriangle className="mr-2 h-4 w-4" />
-                    Panic Button
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Need Immediate Help?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    If you are in a crisis or any other person may be in danger, please don't use this app. These resources can provide you with immediate help.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <div className="space-y-2 text-sm">
-                    <p><strong>AASRA:</strong> <a href="tel:91-9820466726" className="text-primary hover:underline">91-9820466726</a> (24x7 Helpline)</p>
-                    <p><strong>Vandrevala Foundation:</strong> <a href="tel:91-9999666555" className="text-primary hover:underline">91-9999666555</a> (24x7 Helpline)</p>
-                    <p><strong>iCALL:</strong> <a href="tel:91-9152987821" className="text-primary hover:underline">91-9152987821</a> (Mon-Sat, 10 AM - 8 PM)</p>
-                </div>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Close</AlertDialogCancel>
-                  <AlertDialogAction asChild><a href="tel:91-9820466726">Call Now</a></AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-        </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="sm">
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                Panic Button
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Need Immediate Help?</AlertDialogTitle>
+              <AlertDialogDescription>
+                If you are in a crisis or any other person may be in danger, please don't use this app. These resources can provide you with immediate help.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="space-y-2 text-sm">
+                <p><strong>AASRA:</strong> <a href="tel:91-9820466726" className="text-primary hover:underline">91-9820466726</a> (24x7 Helpline)</p>
+                <p><strong>Vandrevala Foundation:</strong> <a href="tel:91-9999666555" className="text-primary hover:underline">91-9999666555</a> (24x7 Helpline)</p>
+                <p><strong>iCALL:</strong> <a href="tel:91-9152987821" className="text-primary hover:underline">91-9152987821</a> (Mon-Sat, 10 AM - 8 PM)</p>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Close</AlertDialogCancel>
+              <AlertDialogAction asChild><a href="tel:91-9820466726">Call Now</a></AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardHeader>
       
       <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden p-4 md:p-6">
@@ -217,25 +227,40 @@ export function ChatbotSection() {
       </CardContent>
 
       <CardFooter className="p-4 border-t bg-background/50">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2 w-full">
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormControl>
-                    <Input placeholder="Share what's on your mind..." {...field} autoComplete="off" className="text-base h-11 rounded-full px-5" />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button type="submit" size="icon" disabled={isLoading} className="w-11 h-11 rounded-full shrink-0">
-              <Send className="h-5 w-5" />
-            </Button>
-          </form>
-        </Form>
-      </CardFooter>
+  <Form {...form}>
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2 w-full">
+      <FormField
+        control={form.control}
+        name="message"
+        render={({ field }) => (
+          <FormItem className="flex-1">
+            <FormControl>
+              <Input 
+                placeholder="Share what's on your mind..." 
+                {...field} 
+                autoComplete="off" 
+                className="text-base h-11 rounded-full px-5" 
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+      {/* 🎤 Microphone button */}
+      <Button 
+        type="button" 
+        size="icon" 
+        variant="outline" 
+        className="w-11 h-11 rounded-full"
+        onClick={() => console.log("Mic clicked")}
+      >
+        <Mic className="h-5 w-5" />
+      </Button>
+      <Button type="submit" size="icon" disabled={isLoading} className="w-11 h-11 rounded-full">
+        <Send className="h-5 w-5" />
+      </Button>
+    </form>
+  </Form>
+</CardFooter>
     </Card>
   );
 }

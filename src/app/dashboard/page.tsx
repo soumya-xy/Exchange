@@ -26,6 +26,7 @@ export default function DashboardPage() {
                   <p className="text-muted-foreground text-base md:text-lg">
                       This is your space to reflect, grow, and find support.
                   </p>
+                  
               </div>
 
               <Tabs defaultValue="chatbot" className="w-full">

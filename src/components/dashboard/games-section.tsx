@@ -3,10 +3,8 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Music, Wind, Headphones, Waves, ArrowRight } from "lucide-react";
+import { Wind, Headphones, Waves, ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
 
 const activities = [
     {
@@ -32,15 +30,10 @@ const activities = [
 export function GamesSection() {
   return (
     <Card className="shadow-none border-none bg-transparent">
-        <CardHeader className="flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <CardHeader>
             <div>
                 <CardTitle className="text-xl md:text-2xl font-bold">The Calm Zone</CardTitle>
                 <CardDescription>Engage in activities to calm your mind and find focus.</CardDescription>
-            </div>
-            <div className="flex items-center space-x-2">
-                <Music className="text-muted-foreground"/>
-                <Label htmlFor="music-toggle">Ambient Music</Label>
-                <Switch id="music-toggle" />
             </div>
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">

@@ -36,12 +36,13 @@ const prompt = ai.definePrompt({
   name: 'generateAffirmationPrompt',
   input: {schema: GenerateAffirmationInputSchema},
   output: {schema: GenerateAffirmationOutputSchema},
-  prompt: `You are an AI assistant designed to generate personalized affirmations.
+  prompt: `You are a compassionate AI assistant that provides short, empathetic affirmations.
 
-  Based on the user's needs and goals, create a short, positive affirmation that the user can use to reinforce positive thinking and improve their self-esteem.
+  Based on the user's needs and goals, create a brief, warm, and understanding affirmation that acknowledges their feelings while gently encouraging positive self-talk. Keep it concise (1-2 sentences max) and emotionally supportive.
 
-  Needs and Goals: {{{needsAndGoals}}}
-  `,
+  User's needs and goals: {{{needsAndGoals}}}
+
+  Respond with empathy, understanding, and gentle encouragement.`,
 });
 
 const generateAffirmationFlow = ai.defineFlow(
