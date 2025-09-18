@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Loader2, Send, Sparkles, AlertTriangle, Mic, Phone, UserCircle } from "lucide-react";
+import { Loader2, Send, Sparkles, AlertTriangle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -23,8 +23,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/auth-context"; 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-
 
 const chatSchema = z.object({
   message: z.string().min(1, { message: "Message cannot be empty." }),
@@ -132,19 +130,7 @@ export function ChatbotSection() {
                 <p className="text-sm text-muted-foreground">A safe and private space to share your thoughts.</p>
             </div>
         </div>
-        <div className="flex items-center gap-2">
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" disabled>
-                            <Phone className="h-5 w-5 text-muted-foreground" />
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Voice Conversation (Coming Soon)</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+        <div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="sm">
@@ -212,17 +198,6 @@ export function ChatbotSection() {
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                 </div>
-                 {message.sender === "user" && (
-                    <Avatar className="h-9 w-9 border-2 border-muted shadow-inner">
-                      <AvatarFallback className="bg-muted text-muted-foreground">
-                          {user?.photoURL ? (
-                              <img src={user.photoURL} alt={userName} className="w-full h-full object-cover" />
-                          ) : (
-                            <UserCircle className="w-6 h-6"/>
-                          )}
-                      </AvatarFallback>
-                    </Avatar>
-                  )}
               </div>
             ))}
             {isLoading && (
@@ -248,24 +223,10 @@ export function ChatbotSection() {
               control={form.control}
               name="message"
               render={({ field }) => (
-                <FormItem className="flex-1 relative">
+                <FormItem className="flex-1">
                   <FormControl>
-                    <Input placeholder="Share what's on your mind..." {...field} autoComplete="off" className="text-base h-11 rounded-full px-5 pr-12" />
+                    <Input placeholder="Share what's on your mind..." {...field} autoComplete="off" className="text-base h-11 rounded-full px-5" />
                   </FormControl>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-full" disabled>
-                            <Mic className="h-5 w-5 text-muted-foreground" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Voice to Text (Coming Soon)</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
                 </FormItem>
               )}
             />
