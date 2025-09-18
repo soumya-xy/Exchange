@@ -1,11 +1,14 @@
+
 "use client";
 
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Music, Wind, Puzzle } from "lucide-react";
+import { Music, Wind, Puzzle, Headphones, Waves, PlayCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 function BreathingCircle() {
     return (
@@ -30,11 +33,11 @@ export function GamesSection() {
             </div>
             <div className="flex items-center space-x-2">
                 <Music className="text-muted-foreground"/>
-                <Label htmlFor="music-toggle">Background Music</Label>
+                <Label htmlFor="music-toggle">Ambient Music</Label>
                 <Switch id="music-toggle" />
             </div>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-6 items-start">
+        <CardContent className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
             <Card className="shadow-xl">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Wind className="text-primary"/>Breathing Exercise</CardTitle>
@@ -44,13 +47,38 @@ export function GamesSection() {
                     <BreathingCircle/>
                 </CardContent>
             </Card>
+            <Card className="shadow-xl">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Headphones className="text-primary"/>Sound Therapy</CardTitle>
+                    <CardDescription>Use binaural beats to guide your mind into a state of relaxation or focus.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center justify-center p-6 min-h-[300px] bg-muted/50 rounded-b-lg space-y-6">
+                    <Button variant="outline" size="lg" className="h-20 w-20 rounded-full p-0" disabled>
+                        <PlayCircle className="h-12 w-12 text-muted-foreground" />
+                    </Button>
+                    <div className="w-full max-w-[250px]">
+                        <Select disabled>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Frequency" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="delta">Delta (Sleep)</SelectItem>
+                                <SelectItem value="theta">Theta (Meditate)</SelectItem>
+                                <SelectItem value="alpha">Alpha (Focus)</SelectItem>
+                                <SelectItem value="beta">Beta (Energy)</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                     <Button variant="outline" size="lg" disabled>Coming Soon</Button>
+                </CardContent>
+            </Card>
              <Card className="shadow-xl">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Puzzle className="text-primary"/>Mind Puzzles</CardTitle>
-                    <CardDescription>Simple, relaxing puzzles to help you focus your mind.</CardDescription>
+                    <CardTitle className="flex items-center gap-2"><Waves className="text-primary"/>Zen Garden</CardTitle>
+                    <CardDescription>Create calming patterns in your digital sand garden.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center p-8 min-h-[300px] bg-muted/50 rounded-b-lg">
-                    <Image src="https://picsum.photos/300/200" alt="Puzzle" width={300} height={200} className="rounded-lg shadow-lg mb-6 w-full max-w-[300px]" data-ai-hint="calm landscape"/>
+                    <Image src="https://picsum.photos/seed/zen/300/200" alt="Zen Garden" width={300} height={200} className="rounded-lg shadow-lg mb-6 w-full max-w-[300px]" data-ai-hint="zen garden sand"/>
                     <Button variant="outline" size="lg" disabled>Coming Soon</Button>
                 </CardContent>
             </Card>
