@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Header } from "@/components/header";
-import { Loader2, MessageCircle, BookHeart, Gamepad2, Users } from "lucide-react";
+import { Loader2, MessageCircle, BookHeart, Gamepad2, Users, Music } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { ChatbotSection } from "@/components/dashboard/chatbot-section";
 import { DailyDiarySection } from "@/components/dashboard/daily-diary-section";
 import { GamesSection } from "@/components/dashboard/games-section";
@@ -12,6 +15,7 @@ import { useAuth } from "@/contexts/auth-context";
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [isAmbientMusicEnabled, setIsAmbientMusicEnabled] = useState(false);
 
   return (
     <ProtectedRoute>
@@ -20,13 +24,25 @@ export default function DashboardPage() {
         <main className="flex-1">
           <div className="container mx-auto max-w-7xl py-6 md:py-8 px-4">
               <div className="space-y-2 mb-8">
-                  <h1 className="text-2xl md:text-4xl font-bold font-headline text-foreground">
-                      Welcome back, {user?.displayName || user?.email?.split('@')[0] || 'User'}!
-                  </h1>
-                  <p className="text-muted-foreground text-base md:text-lg">
-                      This is your space to reflect, grow, and find support.
-                  </p>
-                  
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      <div>
+                          <h1 className="text-2xl md:text-4xl font-bold font-headline text-foreground">
+                              Welcome back, {user?.displayName || user?.email?.split('@')[0] || 'User'}!
+                          </h1>
+                          <p className="text-muted-foreground text-base md:text-lg">
+                              This is your space to reflect, grow, and find support.
+                          </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                          <Music className="text-muted-foreground"/>
+                          <Label htmlFor="ambient-music-toggle">Ambient Music</Label>
+                          <Switch 
+                              id="ambient-music-toggle" 
+                              checked={isAmbientMusicEnabled}
+                              onCheckedChange={setIsAmbientMusicEnabled}
+                          />
+                      </div>
+                  </div>
               </div>
 
               <Tabs defaultValue="chatbot" className="w-full">

@@ -1,9 +1,8 @@
-
 "use client";
 
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wind, Headphones, Waves, ArrowRight } from "lucide-react";
+import { Wind, Headphones, Waves, ArrowRight, Eye, BookHeart, Image } from "lucide-react";
 import { Button } from "../ui/button";
 
 const activities = [
@@ -24,11 +23,29 @@ const activities = [
         icon: <Waves className="text-primary"/>,
         title: "Zen Garden",
         description: "Create calming patterns in your digital sand garden.",
+    },
+    {
+        href: "/dashboard/mindful-observation",
+        icon: <Eye className="text-primary"/>,
+        title: "Mindful Observation",
+        description: "Ground yourself in the present with a focus exercise.",
+    },
+    {
+        href: "/dashboard/gratitude-journal",
+        icon: <BookHeart className="text-primary"/>,
+        title: "Gratitude Journal",
+        description: "Shift your focus to the positive by noting what you're thankful for.",
+    },
+    {
+        href: "/dashboard/visual-escape",
+        icon: <Image className="text-primary"/>,
+        title: "Visual Escape",
+        description: "Calm your mind by viewing a curated gallery of soothing images.",
     }
 ]
 
 export function GamesSection() {
-  return (
+ return (
     <Card className="shadow-none border-none bg-transparent">
         <CardHeader>
             <div>
@@ -55,5 +72,5 @@ export function GamesSection() {
             ))}
         </CardContent>
     </Card>
-  );
+ );
 }
