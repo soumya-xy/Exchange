@@ -8,10 +8,11 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { BookCheck, Star, Loader2, Sparkles, Wand2 } from "lucide-react";
+import { BookCheck, Star, Loader2, Sparkles, Wand2, Share2 } from "lucide-react";
 import { addDays, format } from 'date-fns';
 import { useAuth } from "@/contexts/auth-context";
 import { generateAffirmation } from "@/ai/flows/affirmation-generation";
+import { useToast } from "@/hooks/use-toast";
 
 // This can be the type for a single entry
 type JournalEntry = {
@@ -33,6 +34,7 @@ const chartConfig = {
 
 export function DailyDiarySection() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [journalData, setJournalData] = useState<JournalData>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -111,6 +113,14 @@ export function DailyDiarySection() {
       setIsGenerating(false);
     }
   };
+  
+  const handleShareToCommunity = () => {
+    // Mock functionality
+    toast({
+      title: "Shared to Community",
+      description: "Your entry has been shared anonymously.",
+    });
+  };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (date) {
@@ -149,21 +159,26 @@ return (
                           onChange={handleTextChange}
                       />
                   </CardContent>
-                  <CardFooter className="flex flex-col sm:flex-row items-center justify-end gap-2">
-                       <Button variant="outline" onClick={handleGenerateAffirmation} disabled={isGenerating || !currentEntry?.entry}>
-                          {isGenerating ? (
-                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
-                          ) : (
-                            <><Wand2 className="mr-2 h-4 w-4" /> Generate Affirmation</>
-                          )}
+                  <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-2">
+                       <Button variant="ghost" onClick={handleShareToCommunity} disabled={!currentEntry?.entry}>
+                          <Share2 className="mr-2 h-4 w-4" /> Share Anonymously
                        </Button>
-                      <Button onClick={handleSaveEntry} disabled={isSaving}>
-                        {isSaving ? (
-                          <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</>
-                        ) : (
-                          "Save Entry"
-                        )}
-                      </Button>
+                       <div className="flex items-center gap-2">
+                            <Button variant="outline" onClick={handleGenerateAffirmation} disabled={isGenerating || !currentEntry?.entry}>
+                              {isGenerating ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
+                              ) : (
+                                <><Wand2 className="mr-2 h-4 w-4" /> Affirmation</>
+                              )}
+                           </Button>
+                          <Button onClick={handleSaveEntry} disabled={isSaving}>
+                            {isSaving ? (
+                              <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</>
+                            ) : (
+                              "Save Entry"
+                            )}
+                          </Button>
+                       </div>
                   </CardFooter>
               </Card>
 
@@ -293,3 +308,5 @@ return (
   </Card>
 );
 }
+
+    
