@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,10 +8,10 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { BookCheck, Star, Loader2 } from "lucide-react";
+import { BookCheck, Star, Loader2, Sparkles, Wand2 } from "lucide-react";
 import { addDays, format } from 'date-fns';
-import { useAuth } from "@/contexts/auth-context"; // 1. Import useAuth
-
+import { useAuth } from "@/contexts/auth-context";
+import { generateAffirmation } from "@/ai/flows/affirmation-generation";
 
 // This can be the type for a single entry
 type JournalEntry = {
@@ -31,66 +32,30 @@ const chartConfig = {
 };
 
 export function DailyDiarySection() {
-  const { user } = useAuth(); // 2. Get the user from the auth context
+  const { user } = useAuth();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [journalData, setJournalData] = useState<JournalData>({});
-  const [isLoading, setIsLoading] = useState(true); // For initial data load
-  const [isSaving, setIsSaving] = useState(false); // For the save button
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [affirmation, setAffirmation] = useState<string | null>(null);
 
-  // --- 3. DATA FETCHING: Fetch entries when the component loads ---
   useEffect(() => {
     const fetchJournalEntries = async () => {
       if (!user) return;
       setIsLoading(true);
-      try {
-        const token = await user.getIdToken();
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-        // Build query params similar to backend signature: startDate, endDate, limit, includeInsights
-        const endDate = new Date();
-        const startDate = addDays(endDate, -30); // fetch last 30 days
-        const params = new URLSearchParams({
-          startDate: format(startDate, 'yyyy-MM-dd'),
-          endDate: format(endDate, 'yyyy-MM-dd'),
-          limit: '500',
-          includeInsights: 'false',
+      // Mock fetching data
+      setTimeout(() => {
+        setJournalData({
+            [format(new Date(), 'yyyy-MM-dd')]: { mood: 7, entry: "Feeling pretty good today. Productive day at work." },
+            [format(addDays(new Date(), -1), 'yyyy-MM-dd')]: { mood: 5, entry: "A bit stressed about the upcoming deadline." },
+            [format(addDays(new Date(), -3), 'yyyy-MM-dd')]: { mood: 8, entry: "Had a great time with friends." },
         });
-
-        const response = await fetch(`${backendUrl}/api/diary/entries?${params.toString()}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch entries");
-
-        type BackendEntry = {
-          date: string; // ISO date string or yyyy-MM-dd
-          content: string;
-          mood: number;
-          tags?: string[];
-        };
-
-        const payload = await response.json() as { success: boolean; data: BackendEntry[] };
-        if (!payload?.success || !Array.isArray(payload.data)) {
-          throw new Error('Invalid entries response');
-        }
-
-        // Transform backend list into JournalData keyed by yyyy-MM-dd
-        const transformed: JournalData = payload.data.reduce((acc, entry) => {
-          const key = format(new Date(entry.date), 'yyyy-MM-dd');
-          acc[key] = { mood: entry.mood, entry: entry.content };
-          return acc;
-        }, {} as JournalData);
-
-        setJournalData(transformed);
-      } catch (error) {
-        console.error("Error fetching journal data:", error);
-      } finally {
         setIsLoading(false);
-      }
+      }, 1000);
     };
     fetchJournalEntries();
-  }, [user]); // Re-fetch if the user changes
+  }, [user]);
 
   const todayStr = date ? format(date, "yyyy-MM-dd") : "";
   const currentEntry = journalData[todayStr];
@@ -105,19 +70,16 @@ export function DailyDiarySection() {
     };
   });
 
-  // Build a list of prior entries for UI rendering
   const previousEntries = Object.entries(journalData)
     .map(([dateStr, entry]) => ({ dateStr, ...entry }))
     .sort((a, b) => new Date(b.dateStr).getTime() - new Date(a.dateStr).getTime());
 
-  // Calculate consecutive-day check-in streak ending today
   const checkInStreak = (() => {
     let streak = 0;
     for (let i = 0; i < 365; i++) {
       const day = addDays(new Date(), -i);
       const key = format(day, "yyyy-MM-dd");
-      const entry = journalData[key];
-      if (entry && entry.entry?.trim()) {
+      if (journalData[key]?.entry?.trim()) {
         streak++;
       } else {
         break;
@@ -126,55 +88,41 @@ export function DailyDiarySection() {
     return streak;
   })();
 
-  // --- 4. API CALL TO SAVE ENTRY ---
   const handleSaveEntry = async () => {
-    if (!user || !date || !currentEntry) return;
-  
+    if (!currentEntry) return;
     setIsSaving(true);
-    try {
-      const token = await user.getIdToken();
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-      
-      // NOTE: You may need to update the endpoint path if it's different
-      const response = await fetch(`${backendUrl}/api/diary/entries`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        // ✅ This is the corrected body format
-        body: JSON.stringify({
-          content: currentEntry.entry, // Use 'content' key instead of 'entry'
-          mood: currentEntry.mood,
-          tags: [], // Send an empty array for tags for now
-        }),
-      });
-  
-      if (!response.ok) throw new Error("Failed to save entry");
-      
-      console.log("Entry saved successfully!");
-  
-    } catch (error) {
-      console.error("Error saving entry:", error);
-    } finally {
-      setIsSaving(false);
-    }
+    // Mock saving data
+    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log("Saved:", currentEntry);
+    setIsSaving(false);
   };
   
-  // --- 5. Update local state when typing in the textarea ---
+  const handleGenerateAffirmation = async () => {
+    if (!currentEntry?.entry) return;
+    setIsGenerating(true);
+    setAffirmation(null);
+    try {
+      const result = await generateAffirmation({ needsAndGoals: currentEntry.entry });
+      setAffirmation(result.affirmation);
+    } catch (error) {
+      console.error("Error generating affirmation:", error);
+      setAffirmation("Could not generate an affirmation at this time. Please try again later.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (date) {
       const newEntryText = e.target.value;
       const newEntry: JournalEntry = { 
-        mood: currentEntry?.mood || 5, // Default mood to 5 if not set
+        mood: currentEntry?.mood || 5,
         entry: newEntryText 
       };
       setJournalData(prev => ({ ...prev, [todayStr]: newEntry }));
     }
   };
 
-  // ... The rest of your JSX is mostly the same, just with the updated Button
-  // (I've removed the streak card for brevity, you can add it back)
 return (
   <Card className="shadow-none border-none bg-transparent">
       <CardHeader>
@@ -198,24 +146,49 @@ return (
                           placeholder="How was your day? What's on your mind?" 
                           className="min-h-[120px] text-base"
                           value={currentEntry?.entry || ""}
-                          onChange={(e) => {
-                              if (date) {
-                                  const newEntry = { mood: currentEntry?.mood || 5, entry: e.target.value };
-                                  setJournalData(prev => ({ ...prev, [todayStr]: newEntry }));
-                              }
-                          }}
+                          onChange={handleTextChange}
                       />
                   </CardContent>
-                  <CardFooter className="flex justify-end">
+                  <CardFooter className="flex flex-col sm:flex-row items-center justify-end gap-2">
+                       <Button variant="outline" onClick={handleGenerateAffirmation} disabled={isGenerating || !currentEntry?.entry}>
+                          {isGenerating ? (
+                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
+                          ) : (
+                            <><Wand2 className="mr-2 h-4 w-4" /> Generate Affirmation</>
+                          )}
+                       </Button>
                       <Button onClick={handleSaveEntry} disabled={isSaving}>
                         {isSaving ? (
-                          <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Saving...</span>
+                          <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</>
                         ) : (
                           "Save Entry"
                         )}
                       </Button>
                   </CardFooter>
               </Card>
+
+              {(isGenerating || affirmation) && (
+                <Card className="shadow-lg animate-in fade-in-50 duration-500">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                            <Sparkles className="text-accent" /> Your Affirmation
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center gap-4">
+                        {isGenerating ? (
+                           <div className="flex items-center gap-2 text-muted-foreground">
+                             <Loader2 className="h-5 w-5 animate-spin" />
+                             <span>Crafting something positive for you...</span>
+                           </div>
+                        ) : (
+                           <blockquote className="text-base font-medium border-l-4 border-accent pl-4 italic">
+                               {affirmation}
+                           </blockquote>
+                        )}
+                    </CardContent>
+                </Card>
+              )}
+
               <Card className="shadow-lg">
                   <CardHeader>
                       <CardTitle>Your Weekly Mood</CardTitle>
