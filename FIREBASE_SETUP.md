@@ -4,7 +4,7 @@
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click "Create a project" or select an existing project
-3. Enter your project name (e.g., "mann-saathi")
+3. Enter your project name (e.g., "zenith")
 4. Choose whether to enable Google Analytics (recommended)
 5. Click "Create project"
 
@@ -23,7 +23,7 @@
 2. Select "Project settings"
 3. Scroll down to "Your apps" section
 4. Click the web icon (</>)
-5. Register your app with a nickname (e.g., "mann-saathi-web")
+5. Register your app with a nickname (e.g., "zenith-web")
 6. Copy the Firebase configuration object
 
 ## Step 4: Set Environment Variables

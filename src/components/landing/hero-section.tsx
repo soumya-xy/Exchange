@@ -12,7 +12,7 @@ export function HeroSection() {
       <div className="container px-4 md:px-6 relative">
         <div className="flex flex-col items-center space-y-6">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl font-headline text-foreground">
-            Mann Saathi: A Friend for Your Mind.
+            Zenith: A Friend for Your Mind.
           </h1>
           <p className="max-w-[700px] text-muted-foreground text-lg md:text-xl">
             Embrace a guided journey to reduce stress, understand your

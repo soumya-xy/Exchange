@@ -7,7 +7,7 @@ type User = {
   name: string;
 };
 
-const USER_STORAGE_KEY = "mann-saathi-user";
+const USER_STORAGE_KEY = "zenith-user";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);

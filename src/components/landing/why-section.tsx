@@ -11,7 +11,7 @@ export function WhySection() {
               </h2>
               <p className="text-muted-foreground text-lg">
                 In today's fast-paced world, taking a moment for yourself is
-                more important than ever. Mann Saathi was born from a desire to
+                more important than ever. Zenith was born from a desire to
                 provide a compassionate, accessible companion for your mental
                 wellness journey. We believe in the power of small, consistent
                 steps to create lasting positive change. Our mission is to

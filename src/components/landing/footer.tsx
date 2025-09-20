@@ -46,7 +46,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t py-6 sm:flex-row">
           <p className="text-xs text-muted-foreground text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Mann Saathi. All rights reserved.
+            &copy; {new Date().getFullYear()} Zenith. All rights reserved.
           </p>
           <nav className="flex gap-4 sm:gap-6">
             <Link href="#" className="text-xs hover:underline underline-offset-4 text-muted-foreground">Terms of Service</Link>

@@ -4,7 +4,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mann Saathi",
+  title: "Zenith",
   description: "Your empathetic companion for mental wellness.",
 };
 
